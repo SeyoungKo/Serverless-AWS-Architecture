@@ -39,15 +39,16 @@
           <a class="navbar-brand" href="#">Project name</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-          <form class="navbar-form navbar-right" role="form">
-            <div class="form-group">
-              <input type="text" placeholder="Email" class="form-control">
-            </div>
-            <div class="form-group">
-              <input type="password" placeholder="Password" class="form-control">
-            </div>
-            <button type="submit" class="btn btn-success">Sign in</button>
-          </form>
+         <!-- 로그인 버튼 form 제거 및 버튼 추가하기 -->
+          <div class="navbar-form navbar-right">
+            <button id="user-profile" class="btn btn-default">
+              <!-- 프로필 사진은 Auth0를 통해 조회된다. -->
+              <img id="profilepicture" />&nbsp;<span id = "profilename"></span>
+            </button>
+            <button id="auth0-login" class="btn btn-success">Sign in</button>
+            <button id="auth0-logout" class="btn btn-success">Sign Out</button>
+          </div>
+
         </div><!--/.navbar-collapse -->
       </div>
     </nav>
@@ -91,8 +92,17 @@
 
         <script src="js/vendor/bootstrap.min.js"></script>
 
-        <script src="js/main.js"></script>
 
+        <!-- js 파일 불러오기 -->
+        <script src="js/user-controller.js"></script>
+        <script src="js/config.js"></script>
+
+        <script src="js/main.js"></script>
+        <!-- Auth0 Lock 추가하기 -->
+        <script src = "http://cdn.auth0.com/js/lock-9.min.js"></script>
+        <!-- js파일 불러오기 -->
+        <script src="js/user-controller.js"></script>
+        <script src="js/config.js"></script>
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>
             (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
