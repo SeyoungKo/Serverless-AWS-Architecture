@@ -1,45 +1,44 @@
 'use strict';
-
 var AWS = require('aws-sdk');
 
-var elasticTranscoder = new AWS.elasticTranscoder({
-    region:'us-east-1'
+var elasticTranscoder = new AWS.ElasticTranscoder({
+    region: 'us-east-1'
 });
 
 exports.handler = function(event, context, callback){
+    console.log('Welcome');
+
     var key = event.Records[0].s3.object.key;
 
-    var sourceKey = decodeURIComponent(key.replace(/\+/g," "));  // 버킷 객체를 식별하는 키를 디코딩
+    //the input file may have spaces so replace them with '+'
+    var sourceKey = decodeURIComponent(key.replace(/\+/g, ' '));
 
+    //remove the extension
     var outputKey = sourceKey.split('.')[0];
 
-    console.log('key:', key,source,outputKey);
-
     var params = {
-        PipelineId : '1578938992571-sn1wx3',  // pipelineId를 기입한다.
-        OutputKeyPrefix : outputKey + '/',
-        Input:{
-            Key:sourceKey
+        PipelineId: '1578938992571-sn1wx3',
+        Input: {
+            Key: sourceKey
         },
-        Outputs:[
+        Outputs: [
             {
-                Key:outputKey + '-1080p'+ '.mp4',
-                presetId: '1351620000001-000001' // 일반 1080p Elastic Transcoder 사전 설정
+                Key: outputKey + '-1080p' + '.mp4',
+                PresetId: '1351620000001-000001' //Generic 1080p
             },
             {
-                Key:outputKey + '-720p' + '.mp4',
-                presetId:'1351620000001-000001'
+                Key: outputKey + '-720p' + '.mp4',
+                PresetId: '1351620000001-000010' //Generic 720p
             },
             {
-                Key:outputKey + '-web-720p' + '.mp4',
-                presetId : '1351620000001-100070' // 웹에 적합한 720p Elastic Transcoder 사전 설정
+                Key: outputKey + '-web-720p' + '.mp4',
+                PresetId: '1351620000001-100070' //Web Friendly 720p
             }
         ]};
 
-        elasticTranscoder.createJob(params,function(error,data){
-
-            if(error){  // Elastic Transcoder에서 작업을 만들지 못하면 콜백함수로 오류를 기록한다.
-                callback(error);
-         }
+    elasticTranscoder.createJob(params, function(error, data){
+        if (error){
+            callback(error);
+        }
     });
-}
+};
